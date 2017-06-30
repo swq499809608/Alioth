@@ -65,6 +65,7 @@ def autoformat_filter_conv2d(fsize, in_depth, out_depth):
 			raise Exception("Filter length can only be 2.")
 	else:
 		raise Exception("Filter type is not supported.")
+		
 def autoformat_padding(padding):
 	if padding == 'same':
 		return 'SAME'
