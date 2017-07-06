@@ -29,9 +29,10 @@ def reshape_tensor(tensor, shape, name="ReshapeTensor"):
 
 def flatten_tensor(tensor, name="FlattenTensor"):
 	shape = get_tensor_shape(tensor)
-	dims = int(np.prof(shape[1:]))
+	dims = int(np.prod(shape[1:]))
 	new = reshape_tensor(tensor, [-1, dims], name=name)
-
+	return new
+	
 def one_hot_encoding(target, class_num, on_value=1.0, off_value=0.0, name="OneHotEncoding"):
     with tf.name_scope(name):
         if target.dtype != dtypes.int64:
