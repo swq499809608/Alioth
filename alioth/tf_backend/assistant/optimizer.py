@@ -35,5 +35,5 @@ def optimizer(loss, learning_rate, optimizeMethod='adam',
 			optimizer = tf.train \
 				.AdamOptimizer(learning_rate) \
 				.minimize(loss)
-		tf.add_to_collection(Alioth_Ops + '/Optimizer', optimizer)
+		tf.add_to_collection('Alioth_Ops' + '/Optimizer', optimizer)
 	return optimizer

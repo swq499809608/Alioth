@@ -1,5 +1,6 @@
 import tensorflow as tf
-
+import six
+import numpy as np
 def get_from_module(identifier, module_params, module_name, instantiate=False, kwargs=None):
 	if isinstance(identifier, six.string_types):
 		res = module_params.get(identifier)
@@ -73,6 +74,6 @@ def autoformat_padding(padding):
 	elif padding == 'valid':
 		return 'VALID'
 	elif padding in ['SAME', 'VALID']:
-		return padidng
+		return padding
 	else:
 		raise Exception("Padding can only be 'same' or 'valid'.")

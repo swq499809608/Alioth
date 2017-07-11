@@ -12,12 +12,15 @@ def accuracy(labels, predictions, cfsmat_needed=True, per_cent=True, name="Accur
 	with tf.name_scope(name):
 		_predictions = np.argmax(predictions, 1)
 		_labels = np.argmax(labels, 1)
-		cfsmat = cfs_mat(_labels, predictions, name="ConfusionMatrix")
+		if cfsmat_needed:
+			cfsmat = cfs_mat(_labels, predictions, name="ConfusionMatrix") # has issues
+		else:
+			cfsmat = None
 		if per_cent:
 			accuracy = (100.0 * np.sum(_predictions == _labels) / predictions.shape[0])
 		else:
 			accuracy = (np.sum(_predictions == _labels) / predictions.shape[0])
 		tf.add_to_collection(
-			Alioth_Summmaries + '/' + name, 
+			'Alioth_Summmaries' + '/' + name, 
 			tf.summary.scalar(name, accuracy))
 	return accuracy, cfsmat

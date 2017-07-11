@@ -24,7 +24,7 @@ def input_data(shape, dtype=tf.float32, name="InputData"):
 		shape = [None] + shape
 	with tf.name_scope(name):
 		placeholder = tf.placeholder(dtype, shape=shape, name="X")
-	tf.add_to_collection(Alioth_Inputs, placeholder)
+	tf.add_to_collection('Alioth_Inputs', placeholder)
 	return placeholder
 
 def fully_connected(data_flow, out_num, activation='relu', 
@@ -39,20 +39,20 @@ def fully_connected(data_flow, out_num, activation='relu',
 		b_init = init.get(biases_init)(shape=[out_num])
 		weights = tf.Variable(W_init)
 		biases = tf.Variable(b_init)
-		tf.add_to_collection(Alioth_Weights + '/' + name, weights)
-		tf.add_to_collection(Alioth_Biases + '/' + name, biases)
+		tf.add_to_collection('Alioth_Weights' + '/' + name, weights)
+		tf.add_to_collection('Alioth_Biases' + '/' + name, biases)
 		tf.add_to_collection(
-			Alioth_Summaries + '/train',
-			tf.summary.histogram(str(len(tf.get_collection(Alioth_Weights + '/' + name)))+'_weights', weights))
+			'Alioth_Summaries' + '/train',
+			tf.summary.histogram(str(len(tf.get_collection('Alioth_Weights' + '/' + name)))+'_weights', weights))
 		tf.add_to_collection(
-			Alioth_Summaries + '/train',
-			tf.summary.histogram(str(len(tf.get_collection(Alioth_Biases + '/' + name)))+'_biases', biases))
+			'Alioth_Summaries' + '/train',
+			tf.summary.histogram(str(len(tf.get_collection('Alioth_Biases' + '/' + name)))+'_biases', biases))
 
 		if len(shape) > 2:
 			tensor = flatten_tensor(tensor)
 		tensor = tf.matmul(tensor, weights) + biases
 		tensor = act_func.get(activation)(tensor)
-		tf.add_to_collection(Alioth_Tensor + '/' + name, tensor)
+		tf.add_to_collection('Alioth_Tensor' + '/' + name, tensor)
 		
 		tensor.weights = weights
 		tensor.biases = biases
@@ -61,7 +61,7 @@ def fully_connected(data_flow, out_num, activation='relu',
 def dropout(data_flow, keep_prob=0.9, noise_shape=None, train=True, name="Dropout"):
 	with tf.name_scope(name):
 		tensor = tf.nn.dropout(data_flow, keep_prob, noise_shape=noise_shape, name=name)
-		tf.add_to_collection(Alioth_Tensor + '/' + name, tensor)
+		tf.add_to_collection('Alioth_Tensor' + '/' + name, tensor)
 	return tensor
 
 def conv2d(data_flow, out_channels, filter_size, strides=1, padding='SAME',
@@ -78,18 +78,18 @@ def conv2d(data_flow, out_channels, filter_size, strides=1, padding='SAME',
 		b_init = init.get(biases_init)(shape=[out_channels])
 		weights = tf.Variable(W_init)
 		biases = tf.Variable(b_init)
-		tf.add_to_collection(Alioth_Weights + '/' + name, weights)
-		tf.add_to_collection(Alioth_Biases + '/' + name, biases)
+		tf.add_to_collection('Alioth_Weights' + '/' + name, weights)
+		tf.add_to_collection('Alioth_Biases' + '/' + name, biases)
 		tf.add_to_collection(
-			Alioth_Summaries + '/train',
-			tf.summary.histogram(str(len(tf.get_collection(Alioth_Weights + '/' + name)))+'_weights', weights))
+			'Alioth_Summaries' + '/train',
+			tf.summary.histogram(str(len(tf.get_collection('Alioth_Weights' + '/' + name)))+'_weights', weights))
 		tf.add_to_collection(
-			Alioth_Summaries + '/train',
-			tf.summary.histogram(str(len(tf.get_collection(Alioth_Biases + '/' + name)))+'_biases', biases))
+			'Alioth_Summaries' + '/train',
+			tf.summary.histogram(str(len(tf.get_collection('Alioth_Biases' + '/' + name)))+'_biases', biases))
 
 		tensor = tf.nn.conv2d(tensor, weights, strides, padding) + biases
 		tensor = act_func.get(activation)(tensor)
-		tf.add_to_collection(Alioth_Tensor + '/' + name, tensor)
+		tf.add_to_collection('Alioth_Tensor' + '/' + name, tensor)
 
 		tensor.weights = weights
 		tensor.biases = biases
@@ -108,18 +108,18 @@ def atrous_conv2d(data_flow, out_channels, filter_size, rate=1, padding='SAME',
 		b_init = init.get(biases_init)(shape=[out_channels])
 		weights = tf.Variable(W_init)
 		biases = tf.Variable(b_init)
-		tf.add_to_collection(Alioth_Weights + '/' + name, weights)
-		tf.add_to_collection(Alioth_Biases + '/' + name, biases)
+		tf.add_to_collection('Alioth_Weights' + '/' + name, weights)
+		tf.add_to_collection('Alioth_Biases' + '/' + name, biases)
 		tf.add_to_collection(
-			Alioth_Summaries + '/train',
-			tf.summary.histogram(str(len(tf.get_collection(Alioth_Weights + '/' + name)))+'_weights', weights))
+			'Alioth_Summaries' + '/train',
+			tf.summary.histogram(str(len(tf.get_collection('Alioth_Weights' + '/' + name)))+'_weights', weights))
 		tf.add_to_collection(
-			Alioth_Summaries + '/train',
-			tf.summary.histogram(str(len(tf.get_collection(Alioth_Biases + '/' + name)))+'_biases', biases))
+			'Alioth_Summaries' + '/train',
+			tf.summary.histogram(str(len(tf.get_collection('Alioth_Biases' + '/' + name)))+'_biases', biases))
 
 		tensor = tf.nn.atrous_conv2d(tensor, weights, rate, padding) + biases
 		tensor = act_func.get(activation)(tensor)
-		tf.add_to_collection(Alioth_Tensor + '/' + name, tensor)
+		tf.add_to_collection('Alioth_Tensor' + '/' + name, tensor)
 
 		tensor.weights = weights
 		tensor.biases = biases
@@ -133,7 +133,7 @@ def max_pool_2d(data_flow, kernel_size, strides=None, padding='SAME', name="MaxP
 		strides = autoformat_kernel_2d(strides) if strides else ksize
 		padding = autoformat_padding(padding)
 		tensor = tf.nn.max_pool(tensor, ksize, strides, padding=padding)
-		tf.add_to_collection(Alioth_Tensor + '/' + name, tensor)
+		tf.add_to_collection('Alioth_Tensor' + '/' + name, tensor)
 	return tensor
 
 def avg_pool_2d(data_flow, kernel_size, strides=None, padding='SAME', name="AvgPooling2D"):
@@ -144,5 +144,5 @@ def avg_pool_2d(data_flow, kernel_size, strides=None, padding='SAME', name="AvgP
 		strides = autoformat_kernel_2d(strides) if strides else ksize
 		padding = autoformat_padding(padding)
 		tensor = tf.nn.avg_pool(tensor, ksize, strides, padding=padding)
-		tf.add_to_collection(Alioth_Tensor + '/' + name, tensor)
+		tf.add_to_collection('Alioth_Tensor' + '/' + name, tensor)
 	return tensor
