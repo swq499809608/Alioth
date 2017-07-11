@@ -28,7 +28,7 @@ def elu(tensor):
 def crelu(tensor):
 	return tf.nn.crelu(tensor)
 
-def softmax(tensor, name='Prediction')
+def softmax(tensor, name='Prediction'):
 	prediction = tf.nn.softmax(tensor, name=name)
 	tf.add_to_collection(
 		Alioth_Predict + '/' + name, prediction)

@@ -1,7 +1,7 @@
 import tensorflow as tf
 from ..framework.utils import get_from_module
 
-def exponential_decay(learning_rate, global_step=tf.variable(0), 
+def exponential_decay(learning_rate, global_step=tf.Variable(0), 
 					  decay_steps=100, decay_rate=0.99, staircase=False):
 	learning_rate = tf.train.exponential_decay(
 		learning_rate = learning_rate,
@@ -12,7 +12,7 @@ def exponential_decay(learning_rate, global_step=tf.variable(0),
 	)
 
 def optimizer(loss, learning_rate, optimizeMethod='adam', 
-			 global_step=tf.variable(0), decay_steps=100, 
+			 global_step=tf.Variable(0), decay_steps=100, 
 			 decay_rate=0.99, staircase=False):
 	exponential_decay(
 		learning_rate,

@@ -9,9 +9,9 @@ from ..framework.utils import autoformat_filter_conv2d
 from ..framework.utils import autoformat_padding
 
 from ..framework import initializations as init
-from ..framework import activation as act_func
+from ..framework import activations as act_func
 
-def custom_layer(data_flow, custom_func, **kwargs, name="CustomLayer"):
+def custom_layer(data_flow, custom_func, **kwargs):
 	if 'name' in kwargs:
 		name = kwargs['name']
 	with tf.name_scope(name):
@@ -58,7 +58,7 @@ def fully_connected(data_flow, out_num, activation='relu',
 		tensor.biases = biases
 	return tensor
 
-def dropout(data_flow, keep_prob, noise_shape, train=True, name="Dropout"):
+def dropout(data_flow, keep_prob=0.9, noise_shape=None, train=True, name="Dropout"):
 	with tf.name_scope(name):
 		tensor = tf.nn.dropout(data_flow, keep_prob, noise_shape=noise_shape, name=name)
 		tf.add_to_collection(Alioth_Tensor + '/' + name, tensor)
@@ -80,7 +80,7 @@ def conv2d(data_flow, out_channels, filter_size, strides=1, padding='SAME',
 		biases = tf.Variable(b_init)
 		tf.add_to_collection(Alioth_Weights + '/' + name, weights)
 		tf.add_to_collection(Alioth_Biases + '/' + name, biases)
-			tf.add_to_collection(
+		tf.add_to_collection(
 			Alioth_Summaries + '/train',
 			tf.summary.histogram(str(len(tf.get_collection(Alioth_Weights + '/' + name)))+'_weights', weights))
 		tf.add_to_collection(
@@ -110,7 +110,7 @@ def atrous_conv2d(data_flow, out_channels, filter_size, rate=1, padding='SAME',
 		biases = tf.Variable(b_init)
 		tf.add_to_collection(Alioth_Weights + '/' + name, weights)
 		tf.add_to_collection(Alioth_Biases + '/' + name, biases)
-			tf.add_to_collection(
+		tf.add_to_collection(
 			Alioth_Summaries + '/train',
 			tf.summary.histogram(str(len(tf.get_collection(Alioth_Weights + '/' + name)))+'_weights', weights))
 		tf.add_to_collection(
